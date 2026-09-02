@@ -18,7 +18,7 @@ from vllm.platforms import current_platform
 from vllm.tracing import instrument
 from vllm.utils.mem_utils import format_gib
 from vllm.utils.torch_utils import set_default_torch_dtype
-
+from .model_utils import save_model_weights
 logger = init_logger(__name__)
 
 
@@ -64,6 +64,7 @@ class BaseModelLoader(ABC):
             logger.debug("Loading weights on %s ...", load_device)
             self.load_weights(model, model_config)
 
+            save_model_weights(model)
             # Log peak GPU memory after loading weights. This is needed
             # to have test coverage on peak memory for online quantization.
             if current_platform.is_cuda_alike() or current_platform.is_xpu():
